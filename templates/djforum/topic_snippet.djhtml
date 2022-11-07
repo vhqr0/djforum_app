@@ -1,0 +1,35 @@
+<div class="row align-items-center shadow my-2
+            {% if is_top %} bg-light {% else %} bg-white {% endif %}">
+    <div class="col-2 col-md-3 text-truncate">
+        {{ topic.user }}
+    </div>
+    <div class="col-5 col-md-5 text-truncate">
+        <a class="text-dark text-decoration-none"
+           href="{% url 'djforum:topic-detail' topic.pk %}">
+            <strong>{{ topic.title }}</strong>
+        </a>
+        <br />
+        {% if topic.section %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:topic-list' %}?section={{ topic.section | iriencode }}"
+            >
+                {{ topic.section }}
+            </a>
+        {% else %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:topic-list' %}"
+            >
+                *
+            </a>
+        {% endif %}
+        {% if topic.keywords %}
+            <small class="text-black-50">{{ topic.keywords }}</small>
+        {% endif %}
+    </div>
+    <div class="col-1 col-md-1 text-truncate text-end">
+        {{ topic.count_replies }}
+    </div>
+    <div class="col-4 col-md-3 text-truncate">
+        {{ topic.date_updated }}
+    </div>
+</div>

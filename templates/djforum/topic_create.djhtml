@@ -1,0 +1,16 @@
+{% extends "./base.djhtml" %}
+
+{% block title %}
+    DJForum Create Topic
+{% endblock %}
+
+{% block body %}
+    <form action="{% url 'djforum:topic-create' %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Create Topic</legend>
+            {{ form.as_p }}
+        </fieldset>
+        <input class="btn btn-primary" type="submit" />
+    </form>
+{% endblock %}

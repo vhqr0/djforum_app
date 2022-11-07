@@ -1,0 +1,26 @@
+from django.urls import path
+
+from .views import IndexView, LoginView, VerifyView, LogoutView, \
+    UserDetailView, UserProfileUpdateView, get_avatar, AvatarUploadView, \
+    SectionListView, TopicListView, TopicDetailView, TopicCreateView, ReplyCreateView
+
+app_name = 'djforum'
+urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('verify/<int:pk>/', VerifyView.as_view(), name='verify'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('userprofile-update/',
+         UserProfileUpdateView.as_view(),
+         name='userprofile-update'),
+    path('get-avatar/<int:pk>/', get_avatar, name='get-avatar'),
+    path('avatar-upload/', AvatarUploadView.as_view(), name='avatar-upload'),
+    path('section/', SectionListView.as_view(), name='section-list'),
+    path('topic/', TopicListView.as_view(), name='topic-list'),
+    path('topic/<int:pk>/', TopicDetailView.as_view(), name='topic-detail'),
+    path('topic-create/', TopicCreateView.as_view(), name='topic-create'),
+    path('reply-create/<int:pk>/',
+         ReplyCreateView.as_view(),
+         name='reply-create'),
+]

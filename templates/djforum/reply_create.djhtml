@@ -1,0 +1,16 @@
+{% extends "./base.djhtml" %}
+
+{% block title %}
+    DJForum Create Reply
+{% endblock %}
+
+{% block body %}
+    <form action="{% url 'djforum:reply-create' pk %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Create Reply</legend>
+            {{ form.as_p }}
+        </fieldset>
+        <input class="btn btn-primary" type="submit" />
+    </form>
+{% endblock %}
