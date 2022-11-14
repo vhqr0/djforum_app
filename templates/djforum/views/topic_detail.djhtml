@@ -1,0 +1,32 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% load static %}
+
+{% block title %}
+  DJForum Topic - {{ topic }}
+{% endblock %}
+
+{% block navbar %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'djforum:reply-create' topic.pk %}">
+      Create Reply
+    </a>
+  </li>
+{% endblock %}
+
+{% block body %}
+  <div class="container-md text-dark">
+    <div class="row shadow">
+      <h1 class="col-12">{{ topic }}</h1>
+      {% include "djforum/components/topic_hints.djhtml" with topic=topic %}
+    </div>
+    {% include "djforum/components/reply.djhtml" with reply=topic %}
+    <hr class="d-none" />
+    {% for reply in page_obj %}
+      {% include "djforum/components/reply.djhtml" with reply=reply %}
+      <hr class="d-none" />
+    {% endfor %}
+    <hr class="invisible" />
+    {% include "djforum/components/pagination.djhtml" with page_obj=page_obj params=params %}
+  </div>
+{% endblock %}

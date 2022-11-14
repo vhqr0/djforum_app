@@ -1,0 +1,84 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      {% block title %}
+        DJForum
+      {% endblock %}
+    </title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+    <link href="{% static 'djforum/css/bootstrap-django-form.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+
+    <header class="sticky-top bg-light shadow-lg">
+      <nav class="navbar navbar-expand-md">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'djforum:index' %}">DJForum</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#header-collapse"
+          >
+            <span class="navbar-toggler-icon" />
+          </button>
+          <div id="header-collapse" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'djforum:topic-list' %}">
+                  Topics
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'djforum:section-list' %}">
+                  Sections
+                </a>
+              </li>
+              {% block navbar %}
+              {% endblock %}
+              {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="/admin/">
+                      Admin
+                    </a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  {% include "djforum/components/user_span.djhtml" with css_class="nav-link" %}
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'djforum:login' %}">
+                    Login
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <hr class="invisible" />
+
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>

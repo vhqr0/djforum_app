@@ -1,0 +1,9 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% block title %}
+  DJForum Create Reply
+{% endblock %}
+
+{% block body %}
+  {% include "djforum/components/form.djhtml" with form=form legend="Create Reply" %}
+{% endblock %}

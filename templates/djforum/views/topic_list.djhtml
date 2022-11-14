@@ -1,0 +1,24 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% block title %}
+  DJForum Section - {% if section %} {{ section }} {% else %} * {% endif %}
+{% endblock%}
+
+{% block navbar %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'djforum:topic-create' %}?section={{ section | default_if_none:'' | iriencode }}">
+      Create Topic
+    </a>
+  </li>
+{% endblock %}
+
+{% block body %}
+  <div class="container-md text-dark">
+    {% for topic in page_obj %}
+      {% include "djforum/components/topic.djhtml" with topic=topic %}
+      <hr class="d-none" />
+    {% endfor %}
+    <hr class="invisible" />
+    {% include "djforum/components/pagination.djhtml" with page_obj=page_obj params=params %}
+  </div>
+{% endblock %}

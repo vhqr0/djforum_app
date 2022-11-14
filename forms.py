@@ -13,10 +13,25 @@ LOGIN_TYPE_CHOICES = (
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150, required=False)
-    email = forms.EmailField(required=False)
-    password = forms.CharField(max_length=128, widget=forms.PasswordInput)
-    login_type = forms.ChoiceField(choices=LOGIN_TYPE_CHOICES, initial='login')
+    username = forms.CharField(
+        max_length=150,
+        required=False,
+        help_text='Please enter username if you want to login or register.',
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(
+        required=False,
+        help_text=
+        'Please enter email if you want to register or change password.',
+        widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(
+        max_length=128,
+        help_text='Please enter password.',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    login_type = forms.ChoiceField(
+        choices=LOGIN_TYPE_CHOICES,
+        initial='login',
+        help_text='Please select an action.',
+        widget=forms.Select(attrs={'class': 'form-control'}))
 
     def clean(self):
         username = self.cleaned_data['username']
@@ -57,7 +72,9 @@ class LoginForm(forms.Form):
 
 
 class VerifyForm(forms.Form):
-    verify_code = forms.UUIDField()
+    verify_code = forms.UUIDField(
+        help_text='Please enter the verify code sent to your email.',
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def clean(self):
         self.verify_record = VerifyRecord.objects.get(pk=self.verify_pk)
@@ -70,7 +87,9 @@ class VerifyForm(forms.Form):
 
 
 class AvatarUploadForm(forms.Form):
-    avatar = forms.ImageField(help_text='Please upload an image < 4KB.')
+    avatar = forms.ImageField(
+        help_text='Please upload an image < 4KB.',
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
     def clean(self):
         if self.cleaned_data['avatar'].size > 4096:
@@ -82,18 +101,31 @@ class AvatarUploadForm(forms.Form):
 
 
 class TopicCreateForm(forms.Form):
-    section = forms.CharField(max_length=16, required=False)
-    title = forms.CharField(max_length=64)
-    keywords = forms.CharField(max_length=64, required=False)
-    description = forms.CharField(max_length=2048,
-                                  required=False,
-                                  widget=forms.Textarea)
+    section = forms.CharField(
+        max_length=16,
+        required=False,
+        help_text='Please enter a section if you want.',
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    title = forms.CharField(
+        max_length=64,
+        help_text='Please enter the title.',
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    keywords = forms.CharField(
+        max_length=64,
+        required=False,
+        help_text='Please enter keywords if you want.',
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    content = forms.CharField(
+        max_length=2048,
+        required=False,
+        help_text='Please enter a description < 2048 chars if you want.',
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     def save(self, request):
         topic = Topic(user=request.user,
                       title=self.cleaned_data['title'],
                       keywords=self.cleaned_data['keywords'],
-                      description=self.cleaned_data['description'])
+                      content=self.cleaned_data['content'])
         section_name = self.cleaned_data['section']
         if section_name:
             section, _ = Section.objects.get_or_create(name=section_name)
@@ -105,7 +137,10 @@ class TopicCreateForm(forms.Form):
 
 
 class ReplyCreateForm(forms.Form):
-    reply = forms.CharField(max_length=2048, widget=forms.Textarea)
+    reply = forms.CharField(
+        max_length=2048,
+        help_text='Please input text < 2048 chars.',
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     def save(self, request, topic):
         topic.count_replies += 1

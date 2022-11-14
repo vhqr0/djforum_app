@@ -1,0 +1,32 @@
+<div class="container border">
+  <form class="django-form"
+
+        {% if action %}
+        action="{{ action }}"
+        {% else %}
+        action="{{ request.get_full_path }}"
+        {% endif %}
+
+        {% if method %}
+        method="{{ method }}"
+        {% else %}
+        method="POST"
+        {% endif %}
+
+        {% if enctype %}
+        enctype="{{ enctype }}"
+        {% endif %}
+  >
+    {% csrf_token %}
+
+    <fieldset>
+      {% if legend %}
+        <legend>{{ legend }}</legend>
+      {% endif %}
+      {{ form.as_p }}
+    </fieldset>
+
+    <button class="btn btn-outline-secondary mb-3" type="submit">Submit</button>
+
+  </form>
+</div>

@@ -115,7 +115,7 @@ class Topic(models.Model):
     section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=64)
     keywords = models.CharField(max_length=64, blank=True)
-    description = models.TextField(max_length=2048, blank=True)
+    content = models.TextField(max_length=2048, blank=True)
     count_replies = models.IntegerField(default=0)
     date_updated = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)

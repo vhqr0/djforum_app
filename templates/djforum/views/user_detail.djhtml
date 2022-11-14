@@ -1,0 +1,44 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% block title %}
+  DJForum User - {{ user.username }}
+{% endblock %}
+
+{% block navbar %}
+  {% if user.pk == request.user.pk %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'djforum:logout' %}">
+        Logout
+      </a>
+    </li>
+    <li class="nav-item">
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% if request.user.pk == user.pk %}
+    <a href="{% url 'djforum:avatar-upload' %}">
+      <img class="rounded"
+           style="width: 10rem; height: 10rem;"
+           alt="avatar"
+           src="{% url 'djforum:get-avatar' user.pk %}"
+      />
+    </a>
+  {% else %}
+    <img class="rounded"
+         style="width: 10rem; height: 10rem;"
+         alt="avatar"
+         src="{% url 'djforum:get-avatar' user.pk %}"
+    />
+  {% endif %}
+  <h1>
+    {{ user }}
+  </h1>
+  {% if request.user.pk == user.pk %}
+    <small><a href="{% url 'djforum:userprofile-update' %}">edit</a></small>
+  {% endif %}
+  <h2>Website</h2>
+  <p>{{ profile.website }}</p>
+  <h2>Introduction</h2>
+  <pre>{{ profile.introduction }}</pre>
+{% endblock %}

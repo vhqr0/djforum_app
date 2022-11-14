@@ -1,0 +1,11 @@
+<div class="row align-items-top my-2">
+  <div class="col-3 col-md-2 p-2 shadow">
+    {% include "djforum/components/user_card.djhtml" with user=reply.user %}
+  </div>
+  <div class="col-9 col-md-10 shadow-sm">
+    <div class="p-3">
+      <div class="bg-light text-secondary text-decoration-underline mb-3">{{ reply.date_created }}</div>
+      <pre>{{ reply.content }}</pre>
+    </div>
+  </div>
+</div>

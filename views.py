@@ -17,7 +17,7 @@ from urllib.parse import urlencode
 
 
 class IndexView(TemplateView):
-    template_name = 'djforum/index.djhtml'
+    template_name = 'djforum/views/index.djhtml'
 
     def get_context_data(self, **kwargs):
         toptopics = TopTopic.objects.all()
@@ -27,7 +27,7 @@ class IndexView(TemplateView):
 
 class LoginView(FormView):
     form_class = LoginForm
-    template_name = 'djforum/login.djhtml'
+    template_name = 'djforum/views/forms/login.djhtml'
 
     def form_valid(self, form):
         self.login_type = self.request.POST['login_type']
@@ -48,7 +48,7 @@ class LoginView(FormView):
 
 class VerifyView(FormView):
     form_class = VerifyForm
-    template_name = 'djforum/verify.djhtml'
+    template_name = 'djforum/views/forms/verify.djhtml'
 
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
@@ -74,7 +74,7 @@ class LogoutView(RedirectView):
 
 class UserDetailView(DetailView):
     model = User
-    template_name = 'djforum/user_detail.djhtml'
+    template_name = 'djforum/views/user_detail.djhtml'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -85,7 +85,7 @@ class UserDetailView(DetailView):
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = UserProfile
     fields = ['website', 'introduction']
-    template_name = 'djforum/userprofile_update.djhtml'
+    template_name = 'djforum/views/forms/userprofile_update.djhtml'
     login_url = reverse_lazy('djforum:login')
 
     def get_object(self, queryset=None):
@@ -108,7 +108,7 @@ def get_avatar(request, pk):
 
 class AvatarUploadView(LoginRequiredMixin, FormView):
     form_class = AvatarUploadForm
-    template_name = 'djforum/avatar_upload.djhtml'
+    template_name = 'djforum/views/forms/avatar_upload.djhtml'
     login_url = reverse_lazy('djforum:login')
 
     def form_valid(self, form):
@@ -120,7 +120,7 @@ class AvatarUploadView(LoginRequiredMixin, FormView):
 
 
 class SectionListView(ListView):
-    template_name = 'djforum/section_list.djhtml'
+    template_name = 'djforum/views/section_list.djhtml'
     paginate_by = 50
 
     def get_queryset(self):
@@ -140,7 +140,7 @@ class SectionListView(ListView):
 
 
 class TopicListView(ListView):
-    template_name = 'djforum/topic_list.djhtml'
+    template_name = 'djforum/views/topic_list.djhtml'
     paginate_by = 20
 
     def get_queryset(self):
@@ -161,7 +161,7 @@ class TopicListView(ListView):
 
 
 class TopicDetailView(SingleObjectMixin, ListView):
-    template_name = 'djforum/topic_detail.djhtml'
+    template_name = 'djforum/views/topic_detail.djhtml'
     paginate_by = 20
 
     def get(self, request, *args, **kwargs):
@@ -179,7 +179,7 @@ class TopicDetailView(SingleObjectMixin, ListView):
 
 class TopicCreateView(LoginRequiredMixin, FormView):
     form_class = TopicCreateForm
-    template_name = 'djforum/topic_create.djhtml'
+    template_name = 'djforum/views/forms/topic_create.djhtml'
     login_url = reverse_lazy('djforum:login')
 
     def get_initial(self):
@@ -200,13 +200,8 @@ class TopicCreateView(LoginRequiredMixin, FormView):
 
 class ReplyCreateView(LoginRequiredMixin, FormView):
     form_class = ReplyCreateForm
-    template_name = 'djforum/reply_create.djhtml'
+    template_name = 'djforum/views/forms/reply_create.djhtml'
     login_url = reverse_lazy('djforum:login')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['pk'] = self.kwargs['pk']
-        return context
 
     def form_valid(self, form):
         topic = get_object_or_404(Topic, pk=self.kwargs['pk'])

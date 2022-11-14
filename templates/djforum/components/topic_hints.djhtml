@@ -1,0 +1,6 @@
+<span>
+  {% include "djforum/components/section.djhtml" with section=topic.section %}
+  {% if topic.keywords %}
+    <small class="text-black-50">{{ topic.keywords }}</small>
+  {% endif %}
+</span>

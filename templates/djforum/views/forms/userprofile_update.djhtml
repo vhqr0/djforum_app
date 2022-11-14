@@ -1,0 +1,9 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% block title %}
+  DJForum User - {{ user }}
+{% endblock %}
+
+{% block body %}
+  {% include "djforum/components/form.djhtml" with form=form %}
+{% endblock %}

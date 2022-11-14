@@ -1,0 +1,22 @@
+{% extends "djforum/components/base.djhtml" %}
+
+{% block navbar %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'djforum:topic-create' %}">
+      Create Topic
+    </a>
+  </li>
+{% endblock %}
+
+{% block body %}
+  <div class="container-md text-dark">
+    {% for toptopic in toptopics %}
+      {% include "djforum/components/topic.djhtml" with topic=toptopic.topic is_top=True %}
+      <hr class="d-none" />
+    {% endfor %}
+    {% for topic in topics %}
+      {% include "djforum/components/topic.djhtml" with topic=topic %}
+      <hr class="d-none" />
+    {% endfor %}
+  </div>
+{% endblock %}

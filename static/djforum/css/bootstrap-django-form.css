@@ -1,0 +1,9 @@
+.django-form span.helptext {
+  margin-top: 0.25rem;
+  font-size: 0.875rem; /* $small-font-size */
+  color: #6c757d; /* $gray-600 */
+}
+
+.django-form label {
+  margin-bottom: 0.5rem;
+}
