@@ -180,8 +180,14 @@ class TopicCreateView(LoginRequiredMixin, FormView):
     def get_initial(self):
         initial = super().get_initial()
         section = self.request.GET.get('section')
+        reference_topic = self.request.GET.get('reference_topic')
+        reference_floor = self.request.GET.get('reference_floor')
         if section:
             initial['section'] = section
+        if reference_topic:
+            initial['reference_topic'] = reference_topic
+        if reference_floor:
+            initial['reference_floor'] = reference_floor
         return initial
 
     def form_valid(self, form):
@@ -197,6 +203,16 @@ class ReplyCreateView(LoginRequiredMixin, FormView):
     form_class = ReplyCreateForm
     template_name = 'djforum/views/forms/reply_create.djhtml'
     login_url = reverse_lazy('djforum:login')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        reference_topic = self.request.GET.get('reference_topic')
+        reference_floor = self.request.GET.get('reference_floor')
+        if reference_topic:
+            initial['reference_topic'] = reference_topic
+        if reference_floor:
+            initial['reference_floor'] = reference_floor
+        return initial
 
     def form_valid(self, form):
         topic = get_object_or_404(Topic, pk=self.kwargs['pk'])

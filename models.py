@@ -125,6 +125,8 @@ class Topic(models.Model):
     title = models.CharField(max_length=64)
     keywords = models.CharField(max_length=64, blank=True)
     content = models.TextField(max_length=2048, blank=True)
+    reference_topic = models.BigIntegerField(null=True)
+    reference_floor = models.IntegerField(null=True)
     count_replies = models.IntegerField(default=0)
     date_updated = models.DateTimeField(auto_now=True)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -186,6 +188,8 @@ class Reply(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     count_replies = models.IntegerField()
     content = models.TextField(max_length=2048)
+    reference_topic = models.BigIntegerField(null=True)
+    reference_floor = models.IntegerField(null=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

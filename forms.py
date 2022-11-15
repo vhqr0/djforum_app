@@ -115,6 +115,14 @@ class TopicCreateForm(forms.Form):
         required=False,
         help_text='Please enter keywords if you want.',
         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    reference_topic = forms.IntegerField(
+        required=False,
+        help_text='Refer to a topic.',
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    reference_floor = forms.IntegerField(
+        required=False,
+        help_text='Refer to a reply.',
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
     content = forms.CharField(
         max_length=2048,
         required=False,
@@ -125,6 +133,8 @@ class TopicCreateForm(forms.Form):
         topic = Topic(user=request.user,
                       title=self.cleaned_data['title'],
                       keywords=self.cleaned_data['keywords'],
+                      reference_topic=self.cleaned_data['reference_topic'],
+                      reference_floor=self.cleaned_data['reference_floor'],
                       content=self.cleaned_data['content'])
         section_name = self.cleaned_data['section']
         if section_name:
@@ -137,6 +147,14 @@ class TopicCreateForm(forms.Form):
 
 
 class ReplyCreateForm(forms.Form):
+    reference_topic = forms.IntegerField(
+        required=False,
+        help_text='Refer to a topic.',
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    reference_floor = forms.IntegerField(
+        required=False,
+        help_text='Refer to a reply.',
+        widget=forms.NumberInput(attrs={'class': 'form-control'}))
     reply = forms.CharField(
         max_length=2048,
         help_text='Please input text < 2048 chars.',
@@ -148,5 +166,7 @@ class ReplyCreateForm(forms.Form):
         reply = Reply(user=request.user,
                       topic=topic,
                       count_replies=topic.count_replies,
+                      reference_topic=self.cleaned_data['reference_topic'],
+                      reference_floor=self.cleaned_data['reference_floor'],
                       content=self.cleaned_data['reply'])
         reply.save()

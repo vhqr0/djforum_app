@@ -49,10 +49,10 @@
 
     <hr class="invisible" />
 
-    {% include "djforum/components/reply.djhtml" with reply=topic is_top=True %}
+    {% include "djforum/components/reply.djhtml" with reply=topic topic=topic is_top=True %}
     <hr class="d-none" />
     {% for reply in page_obj %}
-      {% include "djforum/components/reply.djhtml" with reply=reply %}
+      {% include "djforum/components/reply.djhtml" with reply=reply topic=topic %}
       <hr class="d-none" />
     {% endfor %}
     <hr class="invisible" />

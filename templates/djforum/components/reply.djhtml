@@ -1,3 +1,5 @@
+{% load djforum_templatetags %}
+
 <div class="row align-items-top my-2">
   <div class="col-3 col-md-2 p-2 shadow">
     {% include "djforum/components/user_card.djhtml" with user=reply.user %}
@@ -13,8 +15,37 @@
         {{ reply.date_created }}
         {% if reply.user %}
           <a class="badge bg-secondary text-decoration-none" href="{{ self.path }}?user={{ reply.user }}">See Him/Her</a>
+
+          {% if is_top %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:reply-create' topic.pk %}?reference_topic={{ topic.pk }}"
+            >
+              @
+            </a>
+          {% else %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:reply-create' topic.pk %}?reference_topic={{ topic.pk }}&reference_floor={{ reply.count_replies }}"
+            >
+              @
+            </a>
+          {% endif %}
+
+          {% if is_top %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:topic-create' %}?reference_topic={{ topic.pk }}&section={{ topic.section | default_if_none:'' | iriencode }}"
+            >
+              @@
+            </a>
+          {% else %}
+            <a class="badge bg-secondary text-decoration-none"
+               href="{% url 'djforum:topic-create' %}?reference_topic={{ topic.pk }}&reference_floor={{ reply.count_replies }}&section={{ topic.section | default_if_none:'' | iriencode }}"
+            >
+              @@
+            </a>
+          {% endif %}
         {% endif %}
       </div>
+      {% reply_reference reply %}
       <pre>{{ reply.content }}</pre>
     </div>
   </div>

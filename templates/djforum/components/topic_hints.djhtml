@@ -1,4 +1,9 @@
 <span>
+  <a class="badge bg-secondary text-decoration-none"
+     href="{% url 'djforum:topic-create' %}?reference_topic={{ topic.pk }}&section={{ topic.section | default_if_none:'' | iriencode }}"
+  >
+    @
+  </a>
   {% include "djforum/components/section.djhtml" with section=topic.section %}
   {% if topic.keywords %}
     <small class="text-black-50">{{ topic.keywords }}</small>
