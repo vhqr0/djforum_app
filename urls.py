@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import IndexView, LoginView, VerifyView, LogoutView, \
     UserDetailView, UserProfileUpdateView, get_avatar, AvatarUploadView, \
-    SectionListView, TopicListView, TopicDetailView, TopicCreateView, ReplyCreateView
+    SectionListView, TopicListView, TopicDetailView, \
+    TopicCreateView, ReplyCreateView, topic_like, reply_like
 
 app_name = 'djforum'
 urlpatterns = [
@@ -23,4 +24,6 @@ urlpatterns = [
     path('reply-create/<int:pk>/',
          ReplyCreateView.as_view(),
          name='reply-create'),
+    path('topic-like/<int:pk>/', topic_like, name='topic-like'),
+    path('reply-like/<int:pk>/', reply_like, name='reply-like'),
 ]

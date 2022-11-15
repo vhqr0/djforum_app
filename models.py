@@ -128,6 +128,7 @@ class Topic(models.Model):
     reference_topic = models.BigIntegerField(null=True)
     reference_floor = models.IntegerField(null=True)
     count_replies = models.IntegerField(default=0)
+    count_likes = models.IntegerField(default=0)
     date_updated = models.DateTimeField(auto_now_add=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -169,7 +170,9 @@ class Topic(models.Model):
             qs = qs.filter(user=user)
         if search:
             qs = qs.filter(content__icontains=search)
-        if order == 'new':
+        if order == 'likes':
+            qs = qs.order_by('-count_likes')
+        elif order == 'new':
             qs = qs.order_by('-id')
         else:
             qs = qs.order_by('id')
@@ -190,6 +193,7 @@ class Reply(models.Model):
     content = models.TextField(max_length=2048)
     reference_topic = models.BigIntegerField(null=True)
     reference_floor = models.IntegerField(null=True)
+    count_likes = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -197,3 +201,22 @@ class Reply(models.Model):
 
     def __str__(self):
         return f'{self.user}: {self.topic}'
+
+
+class LikeTopic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} likes {self.topic}'
+
+
+class LikeReply(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Like Replies'
+
+    def __str__(self):
+        return f'{self.user} likes {self.reply}'

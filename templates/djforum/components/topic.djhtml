@@ -13,6 +13,8 @@
   </div>
   <div class="col-2 col-md-1 text-truncate text-end">
     &#x2709; {{ topic.count_replies }}
+    <br />
+    &#x2764; {{ topic.count_likes }}
   </div>
   <div class="col-4 col-md-3 text-black-50 text-truncate">
     {{ topic.date_updated | date:'Y-m-d H:i' }}

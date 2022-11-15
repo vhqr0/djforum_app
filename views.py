@@ -5,12 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import RedirectView, TemplateView, DetailView, ListView, FormView
 from django.views.generic.edit import UpdateView
 from django.views.generic.detail import SingleObjectMixin
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
-from .models import UserProfile, Section, Topic, TopTopic
+from .models import UserProfile, Section, Topic, TopTopic, Reply, LikeTopic, LikeReply
 from .forms import LoginForm, VerifyForm, AvatarUploadForm, TopicCreateForm, ReplyCreateForm
 
 from urllib.parse import urlencode
@@ -79,7 +80,8 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['profile'] = UserProfile.get_profile(self.object)
-        context['topics'] = self.object.topic_set.order_by('-date_created')[:10]
+        context['topics'] = self.object.topic_set.order_by(
+            '-date_created')[:10]
         return context
 
 
@@ -221,3 +223,29 @@ class ReplyCreateView(LoginRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('djforum:topic-detail', args=(self.kwargs['pk'], ))
+
+
+@require_POST
+@login_required(login_url=reverse_lazy('djforum:login'))
+def topic_like(request, pk):
+    user = request.user
+    topic = get_object_or_404(Topic, pk=pk)
+    likes = LikeTopic.objects.filter(user=user, topic=topic)
+    if likes.count() == 0:
+        LikeTopic.objects.create(user=user, topic=topic)
+        topic.count_likes += 1
+        topic.save()
+    return HttpResponse()
+
+
+@require_POST
+@login_required(login_url=reverse_lazy('djforum:login'))
+def reply_like(request, pk):
+    user = request.user
+    reply = get_object_or_404(Reply, pk=pk)
+    likes = LikeReply.objects.filter(user=user, reply=reply)
+    if likes.count() == 0:
+        LikeReply.objects.create(user=user, reply=reply)
+        reply.count_likes += 1
+        reply.save()
+    return HttpResponse()

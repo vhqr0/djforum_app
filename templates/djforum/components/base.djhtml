@@ -23,6 +23,8 @@
       crossorigin="anonymous"
     ></script>
     <link href="{% static 'djforum/css/bootstrap-django-form.css' %}" rel="stylesheet" />
+    {% block head %}
+    {% endblock %}
   </head>
   <body>
 

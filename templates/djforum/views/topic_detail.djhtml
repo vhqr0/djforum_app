@@ -6,6 +6,10 @@
   DJForum Topic - {{ topic }}
 {% endblock %}
 
+{% block head %}
+  <script src="{% static 'djforum/js/djf_reply_heart.js' %}"></script>
+{% endblock %}
+
 {% block navbar %}
   <li class="nav-item">
     <a class="nav-link" href="{% url 'djforum:reply-create' topic.pk %}">
@@ -40,6 +44,7 @@
         <select class="form-select" id="topic-detail-order" name="order">
           <option value="old">OLD</option>
           <option value="new">NEW</option>
+          <option value="likes">LIKES</option>
         </select>
       </div>
       <div class="col-12 mt-3 text-end">
