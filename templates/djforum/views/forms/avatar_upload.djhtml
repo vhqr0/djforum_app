@@ -1,7 +1,7 @@
 {% extends "djforum/components/base.djhtml" %}
 
 {% block title %}
-  DJForum User - {{ user }}
+  DJForum User - {{ request.user }}
 {% endblock %}
 
 {% block body %}

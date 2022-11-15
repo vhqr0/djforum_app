@@ -79,6 +79,7 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['profile'] = UserProfile.get_profile(self.object)
+        context['topics'] = self.object.topic_set.order_by('-date_created')[:10]
         return context
 
 

@@ -52,8 +52,8 @@
               </li>
               {% block navbar %}
               {% endblock %}
-              {% if user.is_authenticated %}
-                {% if user.is_superuser %}
+              {% if request.user.is_authenticated %}
+                {% if request.user.is_superuser %}
                   <li class="nav-item">
                     <a class="nav-link" href="/admin/">
                       Admin
@@ -61,7 +61,7 @@
                   </li>
                 {% endif %}
                 <li class="nav-item">
-                  {% include "djforum/components/user_span.djhtml" with css_class="nav-link" %}
+                  {% include "djforum/components/user_span.djhtml" with user=request.user css_class="nav-link" %}
                 </li>
               {% else %}
                 <li class="nav-item">
