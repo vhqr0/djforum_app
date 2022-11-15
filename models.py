@@ -128,7 +128,7 @@ class Topic(models.Model):
     reference_topic = models.BigIntegerField(null=True)
     reference_floor = models.IntegerField(null=True)
     count_replies = models.IntegerField(default=0)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

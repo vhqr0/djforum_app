@@ -1,14 +1,15 @@
 {% if is_missing %}
-  <div class="badge bg-secondary">
+  <a class="badge bg-secondary"
+     {% if topic and is_cross %}
+     href="{% url 'djforum:topic-detail' topic.pk %}"
+     {% endif %}
+  >
     {% if topic %}
-      @ #???
-      {% if is_cross %}
-        from <a href="{% url 'djforum:topic-detail' topic.pk %}">{{ topic }}</a>
-      {% endif %}
+      @ #??? {% if is_cross %} from {{ topic }} {% endif %}
     {% else %}
       @ #??? from *
     {% endif %}
-  </div>
+  </a>
 {% else %}
   {% if reply %}
     <a class="badge bg-secondary"
@@ -31,7 +32,7 @@
         {% include "djforum/components/user_span.djhtml" with user=reply.user %}
       </h5>
       {% if reply.reference_topic %}
-        <div class="badge bg-secondary">@ ...</div>
+        <div class="badge bg-secondary mb-2">@ ...</div>
       {% endif %}
       <pre>{{ reply.content }}</pre>
     </div>

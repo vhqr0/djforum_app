@@ -1,5 +1,6 @@
 from django import forms
 from django.db.models import Q
+from django.utils import timezone
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
@@ -162,6 +163,7 @@ class ReplyCreateForm(forms.Form):
 
     def save(self, request, topic):
         topic.count_replies += 1
+        topic.date_updated = timezone.now()
         topic.save()
         reply = Reply(user=request.user,
                       topic=topic,

@@ -14,6 +14,7 @@
 
 {% block body %}
   <div class="container-md text-dark">
+    <h1 class="row">Section: {% if section %} {{ section }} {% else %} * {% endif %}</h1>
 
     <form class="row"
           action="{{ request.path }}"
