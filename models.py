@@ -134,6 +134,7 @@ class TopTopic(models.Model):
 class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    count_replies = models.IntegerField()
     content = models.TextField(max_length=2048)
     date_created = models.DateTimeField(auto_now_add=True)
 

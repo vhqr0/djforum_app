@@ -147,5 +147,6 @@ class ReplyCreateForm(forms.Form):
         topic.save()
         reply = Reply(user=request.user,
                       topic=topic,
+                      count_replies=topic.count_replies,
                       content=self.cleaned_data['reply'])
         reply.save()

@@ -25,7 +25,7 @@
             <dt>Website</dt>
             <dd>
               {% if profile.website %}
-                {{ profie.website }}
+                {{ profile.website }}
               {% else %}
                 <small class="text-secondary">*</small>
               {% endif %}
