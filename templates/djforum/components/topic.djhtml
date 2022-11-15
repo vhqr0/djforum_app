@@ -14,7 +14,9 @@
   <div class="col-1 col-md-1 text-truncate text-end">
     {{ topic.count_replies }}
   </div>
-  <div class="col-4 col-md-3 text-truncate">
-    {{ topic.date_updated }}
+  <div class="col-4 col-md-3 text-black-50 text-truncate">
+    {{ topic.date_updated | date:'Y-m-d H:i' }}
+    <br/>
+    {{ topic.date_created | date:'Y-m-d H:i' }}
   </div>
 </div>

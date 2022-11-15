@@ -4,29 +4,32 @@
   DJForum Section Search - {% if search %} {{ search }} {% else %} * {% endif %}
 {% endblock %}
 
-{% block navbar %}
-  <li class="nav-item">
-    <form class="d-flex"
-          action="{% url 'djforum:section-list' %}"
-          method="GET"
-    >
-      <input class="form-control me-2"
-             name="search"
-             type="search"
-             value="{{ search | default_if_none:'' }}"
-             placeholder="search"
-      />
-      <button class="btn btn-outline-secondary"
-              type="submit"
-      >
-        Submit
-      </button>
-    </form>
-  </li>
-{% endblock %}
-
 {% block body %}
   <div class="container-md text-dark">
+
+    <form class="row"
+          action="{{ request.path }}"
+          method="GET"
+    >
+      <div class="col">
+        <input class="form-control"
+               name="search"
+               type="search"
+               value="{{ search | default_if_none:'' }}"
+               placeholder="search"
+        />
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-secondary"
+                type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <hr class="invisible" />
+
     {% for section in page_obj %}
       {% include "djforum/components/section.djhtml" %}
     {% endfor %}

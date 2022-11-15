@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.db import models
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -109,6 +110,14 @@ class Section(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def filter(cls, GET):
+        qs = cls.objects.all()
+        search = GET.get('search')
+        if search:
+            qs = qs.filter(name__icontains=search)
+        return qs.order_by('-count_topics')
+
 
 class Topic(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -122,6 +131,47 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
+
+    @classmethod
+    def filter(cls, GET):
+        qs = cls.objects.all()
+        section_name = GET.get('section')
+        user_name = GET.get('user')
+        search = GET.get('search')
+        order = GET.get('order')
+        if section_name:
+            section = get_object_or_404(Section, name=section_name)
+            qs = qs.filter(section=section)
+        if user_name:
+            user = get_object_or_404(User, username=user_name)
+            qs = qs.filter(user=user)
+        if search:
+            query = Q(title__icontains=search) | Q(keywords__icontains=search)
+            qs = qs.filter(query)
+        if order == 'create':
+            qs = qs.order_by('-date_created')
+        else:
+            qs = qs.order_by('-date_updated')
+        return qs
+
+    def reply_filter(self, GET):
+        qs = self.reply_set
+        floor = GET.get('floor')
+        user_name = GET.get('user')
+        search = GET.get('search')
+        order = GET.get('order')
+        if floor:
+            qs = qs.filter(count_replies=floor)
+        if user_name:
+            user = get_object_or_404(User, username=user_name)
+            qs = qs.filter(user=user)
+        if search:
+            qs = qs.filter(content__icontains=search)
+        if order == 'new':
+            qs = qs.order_by('-id')
+        else:
+            qs = qs.order_by('id')
+        return qs
 
 
 class TopTopic(models.Model):

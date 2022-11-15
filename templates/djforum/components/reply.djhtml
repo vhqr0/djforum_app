@@ -11,6 +11,9 @@
 #{{ reply.count_replies }}
         {% endif %}
         {{ reply.date_created }}
+        {% if reply.user %}
+          <a class="badge bg-secondary text-decoration-none" href="{{ self.path }}?user={{ reply.user }}">See Him/Her</a>
+        {% endif %}
       </div>
       <pre>{{ reply.content }}</pre>
     </div>

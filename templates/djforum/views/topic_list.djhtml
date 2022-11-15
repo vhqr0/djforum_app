@@ -14,6 +14,37 @@
 
 {% block body %}
   <div class="container-md text-dark">
+
+    <form class="row"
+          action="{{ request.path }}"
+          method="GET"
+    >
+      <div class="col">
+        <label class="form-label" for="topic-detail-section">Section</label>
+        <input class="form-control" id="topic-detail-section" name="section" type="text" value="{{ section | default_if_none:'' }}" />
+      </div>
+      <div class="col">
+        <label class="form-label" for="topic-detail-user">User</label>
+        <input class="form-control" id="topic-detail-user" name="user" type="text" />
+      </div>
+      <div class="col">
+        <label class="form-label" for="topic-detail-search">Search</label>
+        <input class="form-control" id="topic-detail-search" name="search" type="search" />
+      </div>
+      <div class="col">
+        <label class="form-label" for="topic-detail-order">Order</label>
+        <select class="form-select" id="topic-detail-order" name="order">
+          <option value="update">UPDATE</option>
+          <option value="create">CREATE</option>
+        </select>
+      </div>
+      <div class="col-12 mt-3 text-end">
+        <button class="btn btn-outline-secondary" type="submit">Submit</button>
+      </div>
+    </form>
+
+    <hr class="invisible" />
+
     {% for topic in page_obj %}
       {% include "djforum/components/topic.djhtml" with topic=topic %}
       <hr class="d-none" />

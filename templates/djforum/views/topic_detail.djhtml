@@ -16,10 +16,39 @@
 
 {% block body %}
   <div class="container-md text-dark">
-    <div class="row shadow">
+    <div class="row">
       <h1 class="col-12">{{ topic }}</h1>
       {% include "djforum/components/topic_hints.djhtml" with topic=topic %}
     </div>
+
+    <hr class="invisible" />
+
+    <form class="row"
+          action="{{ request.path }}"
+          method="GET"
+    >
+      <div class="col">
+        <label class="form-label" for="topic-detail-user">User</label>
+        <input class="form-control" id="topic-detail-user" name="user" type="text" />
+      </div>
+      <div class="col">
+        <label class="form-label" for="topic-detail-search">Search</label>
+        <input class="form-control" id="topic-detail-search" name="search" type="search" />
+      </div>
+      <div class="col">
+        <label class="form-label" for="topic-detail-order">Order</label>
+        <select class="form-select" id="topic-detail-order" name="order">
+          <option value="old">OLD</option>
+          <option value="new">NEW</option>
+        </select>
+      </div>
+      <div class="col-12 mt-3 text-end">
+        <button class="btn btn-outline-secondary" type="submit">Submit</button>
+      </div>
+    </form>
+
+    <hr class="invisible" />
+
     {% include "djforum/components/reply.djhtml" with reply=topic is_top=True %}
     <hr class="d-none" />
     {% for reply in page_obj %}

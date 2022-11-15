@@ -125,11 +125,7 @@ class SectionListView(ListView):
     paginate_by = 50
 
     def get_queryset(self):
-        qs = Section.objects.all()
-        search = self.request.GET.get('search')
-        if search:
-            qs = qs.filter(name__icontains=search)
-        return qs.order_by('-count_topics')
+        return Section.filter(self.request.GET)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -145,12 +141,7 @@ class TopicListView(ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        qs = Topic.objects.all()
-        section_name = self.request.GET.get('section')
-        if section_name:
-            section = get_object_or_404(Section, name=section_name)
-            qs = qs.filter(section=section)
-        return qs.order_by('-date_updated')
+        return Topic.filter(self.request.GET)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -170,11 +161,14 @@ class TopicDetailView(SingleObjectMixin, ListView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self.object.reply_set.order_by('id')
+        return self.object.reply_filter(self.request.GET)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['topic'] = self.object
+        params = self.request.GET.copy()
+        params.pop('page', True)
+        context['params'] = params.urlencode()
         return context
 
 

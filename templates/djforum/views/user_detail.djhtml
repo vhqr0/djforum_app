@@ -27,6 +27,9 @@
         {% for topic in topics %}
           {% include "djforum/components/topic.djhtml" with topic=topic %}
         {% endfor %}
+        <div class="col-12 text-end">
+          <a href="{% url 'djforum:topic-list' %}?user={{ user | iriencode }}">More</a>
+        </div>
       </div>
     </div>
 
