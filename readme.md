@@ -1,8 +1,8 @@
-* DJForum
+# DJForum
 
 A lightweight forum based on Django.
 
-** Installation
+## Installation
 
 1. You should install `Django` and `Pillow` from `pip` at first.
 2. Then, create a django project, such as `django-admin startproject xxx_proj`.
@@ -12,4 +12,5 @@ A lightweight forum based on Django.
 6. Put the route of djforum to global route `xxx_proj/xxx_proj/urls.py` `urlpatterns`, such as `path('djforum/', include('djforum_app.urls'))`.
 
 ps.1. Any question, see Djnago's Document.
+
 ps.2. You may want to redirect the root route to the djforum index page, such as `path('', lambda request: redirect('djforum:index'))`.
