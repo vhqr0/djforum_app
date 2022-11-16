@@ -1,12 +1,10 @@
 {% extends "djforum/base.djhtml" %}
 
-{% block title %}
-  DJForum Section - {% if section %} {{ section }} {% else %} * {% endif %}
-{% endblock%}
+{% block title %} Section -  {{ section | default:'*' }} {% endblock%}
 
 {% block navbar %}
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'djforum:topic-create' %}?section={{ section | default_if_none:'' | iriencode }}">
+    <a class="nav-link" href="{% url 'djforum:topic-create' %}?section={{ section | default:'' | iriencode }}">
       Create Topic
     </a>
   </li>
@@ -14,43 +12,14 @@
 
 {% block body %}
   <div class="container-md text-dark">
-    <h1 class="row">Section: {% if section %} {{ section }} {% else %} * {% endif %}</h1>
-
-    <form class="row"
-          action="{{ request.path }}"
-          method="GET"
-    >
-      <div class="col">
-        <label class="form-label" for="topic-detail-section">Section</label>
-        <input class="form-control" id="topic-detail-section" name="section" type="text" value="{{ section | default_if_none:'' }}" />
-      </div>
-      <div class="col">
-        <label class="form-label" for="topic-detail-user">User</label>
-        <input class="form-control" id="topic-detail-user" name="user" type="text" />
-      </div>
-      <div class="col">
-        <label class="form-label" for="topic-detail-search">Search</label>
-        <input class="form-control" id="topic-detail-search" name="search" type="search" />
-      </div>
-      <div class="col">
-        <label class="form-label" for="topic-detail-order">Order</label>
-        <select class="form-select" id="topic-detail-order" name="order">
-          <option value="update">UPDATE</option>
-          <option value="create">CREATE</option>
-        </select>
-      </div>
-      <div class="col-12 mt-3 text-end">
-        <button class="btn btn-outline-secondary" type="submit">Submit</button>
-      </div>
-    </form>
-
+    {% include "djforum/components/forms/topic_filter_form.djhtml" with section=section %}
     <hr class="invisible" />
 
     {% for topic in page_obj %}
       {% include "djforum/components/topic.djhtml" with topic=topic %}
       <hr class="d-none" />
     {% endfor %}
-    <hr class="invisible" />
+
     {% include "djforum/components/pagination.djhtml" with page_obj=page_obj params=params %}
   </div>
 {% endblock %}

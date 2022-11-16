@@ -1,0 +1,23 @@
+{% extends "djforum/components/forms/filter_form.djhtml" %}
+
+{% block filter_form %}
+  <div class="col">
+    <label class="form-label" for="topic-detail-section">Section</label>
+    <input class="form-control" id="topic-detail-section" name="section" type="text" value="{{ section | default:'' }}" />
+  </div>
+  <div class="col">
+    <label class="form-label" for="topic-detail-user">User</label>
+    <input class="form-control" id="topic-detail-user" name="user" type="text" />
+  </div>
+  <div class="col">
+    <label class="form-label" for="topic-detail-search">Search</label>
+    <input class="form-control" id="topic-detail-search" name="search" type="search" />
+  </div>
+  <div class="col">
+    <label class="form-label" for="topic-detail-order">Order</label>
+    <select class="form-select" id="topic-detail-order" name="order">
+      <option value="update">UPDATE</option>
+      <option value="create">CREATE</option>
+    </select>
+  </div>
+{% endblock %}

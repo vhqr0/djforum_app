@@ -1,9 +1,7 @@
 {% extends "djforum/base.djhtml" %}
 
-{% block title %}
-  DJForum Verify
-{% endblock %}
+{% block title %} Verify {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/form.djhtml" with form=form legend="Verify" %}
+  {% include "djforum/components/forms/django_form.djhtml" with form=form legend="Verify" %}
 {% endblock %}

@@ -1,12 +1,8 @@
-{% if user and user.is_authenticated %}
-  <a class="{{  css_class | default:'text-dark text-decoration-none' }}"
-     href="{% url 'djforum:user-detail' user.pk %}"
-  >
-    <div style="display: inline-block; width: 1em; height: 1em;">
-      {% include "djforum/components/avatar.djhtml" with user=user %}
-    </div>
-    {{ user }}
-  </a>
-{% else %}
-  *
-{% endif %}
+<a class="{{ css_class | default:'text-dark text-decoration-none' }}"
+   {% if user %} href="{% url 'djforum:user-detail' user.pk %}" {% endif %}
+>
+  <div style="display: inline-block; width: 1em; height: 1em;">
+    {% include "djforum/components/avatar.djhtml" with user=user %}
+  </div>
+  {{ user | default:'*' }}
+</a>

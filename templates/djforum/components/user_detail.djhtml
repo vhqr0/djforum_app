@@ -1,51 +1,29 @@
 <div class="card">
-  <a
-    {% if user and user.is_authenticated and user == request.user %}
-      href="{% url 'djforum:avatar-upload' %}"
-    {% else %}
-      href="#"
-    {% endif %}
-  >
+  <a {% if user == request.user %} href="{% url 'djforum:avatar-upload' %}" {% endif %}>
     {% include "djforum/components/avatar.djhtml" with user=user %}
   </a>
   <div class="card-body">
-    <h2 class="card-title">
-      {% if user and user.is_authenticated %}
-        {{ user }}
-      {% else %}
-        *
-      {% endif %}
-    </h2>
-    {% if user and user.is_authenticated %}
-      <div class="card-text">
-        <dl>
-          <dt>UID</dt>
-          <dd>{{ user.pk }}</dd>
-          <dt>Email</dt>
-          <dd>{{ user.email }}</dd>
-          {% if profile %}
-            <dt>Website</dt>
-            <dd>
-              {% if profile.website %}
-                {{ profile.website }}
-              {% else %}
-                <small class="text-secondary">*</small>
-              {% endif %}
-            </dd>
-            <dt>Introduction</dt>
-            <dd>
-              {% if profile.introduction %}
-                <pre class="border">{{ profile.introduction }}</pre>
-              {% else %}
-                <small class="text-secondary border">This guy is lazy and doesn't write anything</small>
-              {% endif %}
-            </dd>
+    <h2 class="card-title">{{ user }}</h2>
+    <div class="card-text">
+      <dl>
+        <dt>UID</dt> <dd>{{ user.pk }}</dd>
+        <dt>Email</dt> <dd>{{ user.email }}</dd>
+        <dt>Website</dt> <dd>{{ profile.website | default:'*' }}</dd>
+        <dt>Introduction</dt>
+        <dd>
+          {% if profile.introduction %}
+            <pre class="border">{{ profile.introduction }}</pre>
+          {% else %}
+            <small class="text-secondary border">This guy is lazy and doesn't write anything</small>
           {% endif %}
-        </dl>
-        {% if user == request.user %}
-          <div class="text-end"><a href="{% url 'djforum:userprofile-update' %}">Edit</a></div>
-        {% endif %}
-      </div>
-    {% endif %}
+        </dd>
+      </dl>
+      {% if user == request.user %}
+        <div class="text-end">
+          <a class="link-primary" href="{% url 'djforum:userprofile-update' %}">EDIT</a>
+          <a class="link-danger" href="{% url 'djforum:logout' %}">LOGOUT</a>
+        </div>
+      {% endif %}
+    </div>
   </div>
 </div>

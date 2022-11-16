@@ -1,37 +1,25 @@
 {% extends "djforum/base.djhtml" %}
 
-{% block title %}
-  DJForum User - {{ user }}
-{% endblock %}
-
-{% block navbar %}
-  {% if user.pk == request.user.pk %}
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'djforum:logout' %}">
-        Logout
-      </a>
-    </li>
-    <li class="nav-item">
-  {% endif %}
-{% endblock %}
+{% block title %} User - {{ user }} {% endblock %}
 
 {% block body %}
   <div class="container-md">
-
     <div class="row">
-      <div class="col-12 col-md-4 p-2 shadow">
+      <div class="col-12 col-md-4 shadow p-2 my-2">
         {% include "djforum/components/user_detail.djhtml" with user=user profile=profile %}
       </div>
 
-      <div class="col-12 col-md-8 container shadow-sm">
+      <div class="col-12 col-md-7 container">
         {% for topic in topics %}
           {% include "djforum/components/topic.djhtml" with topic=topic %}
         {% endfor %}
-        <div class="col-12 text-end">
-          <a href="{% url 'djforum:topic-list' %}?user={{ user | iriencode }}">More</a>
+        <div class="col-12 text-end mt-3">
+          <a class="link-primary"
+             href="{% url 'djforum:topic-list' %}?user={{ user | iriencode }}">
+            MORE&gt;&gt;&gt;
+          </a>
         </div>
       </div>
     </div>
-
   </div>
 {% endblock %}

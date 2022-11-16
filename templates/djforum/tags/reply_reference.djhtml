@@ -4,37 +4,27 @@
      href="{% url 'djforum:topic-detail' topic.pk %}"
      {% endif %}
   >
-    {% if topic %}
-      @ #??? {% if is_cross %} from {{ topic }} {% endif %}
-    {% else %}
-      @ #??? from *
-    {% endif %}
+    @ #??? {% if is_cross %} from {{ topic | default:'*' }} {% endif %}
   </a>
-{% else %}
-  {% if reply %}
-    <a class="badge bg-secondary"
-       {% if is_top %}
-       href="{% url 'djforum:topic-detail' topic.pk %}"
-       {% else %}
-       href="{% url 'djforum:topic-detail' topic.pk %}?floor={{reply.count_replies}}"
-       {% endif %}
-    >
-      @
-      {% if is_top %}
-#0
-      {% else %}
-#{{ reply.count_replies }}
-      {% endif %}
-      {% if is_cross %} from {{ topic }} {% endif %}
-    </a>
-    <div class="bg-success bg-opacity-10">
-      <h5>
-        {% include "djforum/components/user_span.djhtml" with user=reply.user %}
-      </h5>
-      {% if reply.reference_topic %}
-        <div class="badge bg-secondary mb-2">@ ...</div>
-      {% endif %}
-      <pre>{{ reply.content }}</pre>
-    </div>
-  {% endif %}
+{% elif reply %}
+  <a class="badge bg-secondary"
+     {% if is_top %}
+     href="{% url 'djforum:topic-detail' topic.pk %}"
+     {% else %}
+     href="{% url 'djforum:topic-detail' topic.pk %}?floor={{reply.count_replies}}"
+     {% endif %}
+  >
+    @ {% if is_top %} #0 {% else %} #{{ reply.count_replies }} {% endif %}
+    {% if is_cross %} from {{ topic }} {% endif %}
+  </a>
+  <div class="bg-success bg-opacity-10">
+    <h5>
+      {% include "djforum/components/user_span.djhtml" with user=reply.user %}
+    </h5>
+    {% if reply.reference_topic %}
+      <div class="badge bg-secondary mb-2">@ ...</div>
+    {% endif %}
+    <pre>{{ reply.content }}</pre>
+  </div>
+  <hr class="d-none" />
 {% endif %}

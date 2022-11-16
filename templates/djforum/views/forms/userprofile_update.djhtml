@@ -1,9 +1,7 @@
 {% extends "djforum/base.djhtml" %}
 
-{% block title %}
-  DJForum User - {{ request.user }}
-{% endblock %}
+{% block title %} User - {{ request.user }} {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/form.djhtml" with form=form %}
+  {% include "djforum/components/forms/django_form.djhtml" with form=form %}
 {% endblock %}

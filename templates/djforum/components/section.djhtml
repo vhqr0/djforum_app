@@ -1,14 +1,14 @@
 {% if section %}
-  <a class="badge bg-secondary text-decoration-none mx-2"
+  <a class="badge bg-secondary text-decoration-none"
      href="{% url 'djforum:topic-list' %}?section={{ section | iriencode }}"
   >
     {{ section }}
-    <span class="badge bg-light text-dark">{{ section.count_topics }}</span>
+    <span class="text-light">{{ section.count_topics }}</span>
   </a>
 {% else %}
-  <a class="badge bg-secondary text-decoration-none mx-2"
+  <a class="badge bg-secondary text-decoration-none"
      href="{% url 'djforum:topic-list' %}"
   >
-    * <span class="badge bg-light text-dark">???</span>
+    * <span class="text-light">???</span>
   </a>
 {% endif %}

@@ -1,9 +1,7 @@
 {% extends "djforum/base.djhtml" %}
 
-{% block title %}
-  DJForum Login
-{% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/form.djhtml" with form=form legend="Login" %}
+  {% include "djforum/components/forms/django_form.djhtml" with form=form legend="Login" %}
 {% endblock %}

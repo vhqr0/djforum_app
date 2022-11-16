@@ -1,5 +1,5 @@
 <nav>
-  <ul class="pagination pagination-sm">
+  <ul class="pagination pagination-sm mt-3">
     {% if page_obj.has_previous %}
       <li class="page-item"><a class="page-link" href="?page=1&{{ params }}">First</a></li>
       <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ params }}">Previous</a></li>

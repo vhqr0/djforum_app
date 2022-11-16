@@ -2,9 +2,7 @@
 
 {% load static %}
 
-{% block title %}
-  DJForum Topic - {{ topic }}
-{% endblock %}
+{% block title %} Topic - {{ topic }} {% endblock %}
 
 {% block head %}
   <script src="{% static 'djforum/js/djf_reply_heart.js' %}"></script>
@@ -25,42 +23,17 @@
       {% include "djforum/components/topic_hints.djhtml" with topic=topic %}
     </div>
 
-    <hr class="invisible" />
-
-    <form class="row"
-          action="{{ request.path }}"
-          method="GET"
-    >
-      <div class="col">
-        <label class="form-label" for="topic-detail-user">User</label>
-        <input class="form-control" id="topic-detail-user" name="user" type="text" />
-      </div>
-      <div class="col">
-        <label class="form-label" for="topic-detail-search">Search</label>
-        <input class="form-control" id="topic-detail-search" name="search" type="search" />
-      </div>
-      <div class="col">
-        <label class="form-label" for="topic-detail-order">Order</label>
-        <select class="form-select" id="topic-detail-order" name="order">
-          <option value="old">OLD</option>
-          <option value="new">NEW</option>
-          <option value="likes">LIKES</option>
-        </select>
-      </div>
-      <div class="col-12 mt-3 text-end">
-        <button class="btn btn-outline-secondary" type="submit">Submit</button>
-      </div>
-    </form>
-
+    {% include "djforum/components/forms/reply_filter_form.djhtml" %}
     <hr class="invisible" />
 
     {% include "djforum/components/reply.djhtml" with reply=topic topic=topic is_top=True %}
     <hr class="d-none" />
+
     {% for reply in page_obj %}
       {% include "djforum/components/reply.djhtml" with reply=reply topic=topic %}
       <hr class="d-none" />
     {% endfor %}
-    <hr class="invisible" />
+
     {% include "djforum/components/pagination.djhtml" with page_obj=page_obj params=params %}
   </div>
 {% endblock %}

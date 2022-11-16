@@ -1,0 +1,18 @@
+{% extends "djforum/components/forms/filter_form.djhtml" %}
+
+{% block filter_form %}
+  <div class="col">
+    <input class="form-control"
+           name="search"
+           type="search"
+           value="{{ search | default:'' }}"
+           placeholder="search"
+    />
+  </div>
+{% endblock %}
+
+{% block filter_form_button %}
+  <div class="col">
+    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+  </div>
+{% endblock %}
