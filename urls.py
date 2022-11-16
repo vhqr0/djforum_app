@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import IndexView, LoginView, VerifyView, LogoutView, \
-    UserDetailView, UserProfileUpdateView, get_avatar, AvatarUploadView, \
+    UserDetailView, UserProfileUpdateView, avatar, AvatarUploadView, \
     SectionListView, TopicListView, TopicDetailView, \
     TopicCreateView, ReplyCreateView, topic_like, reply_like
 
@@ -15,7 +15,7 @@ urlpatterns = [
     path('userprofile-update/',
          UserProfileUpdateView.as_view(),
          name='userprofile-update'),
-    path('get-avatar/<int:pk>/', get_avatar, name='get-avatar'),
+    path('avatar/<int:pk>/', avatar, name='avatar'),
     path('avatar-upload/', AvatarUploadView.as_view(), name='avatar-upload'),
     path('section/', SectionListView.as_view(), name='section-list'),
     path('topic/', TopicListView.as_view(), name='topic-list'),

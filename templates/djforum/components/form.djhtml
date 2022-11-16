@@ -1,16 +1,11 @@
 <div class="container border">
   <form class="django-form"
+        method="POST"
 
         {% if action %}
         action="{{ action }}"
         {% else %}
         action="{{ request.get_full_path }}"
-        {% endif %}
-
-        {% if method %}
-        method="{{ method }}"
-        {% else %}
-        method="POST"
         {% endif %}
 
         {% if enctype %}

@@ -3,7 +3,7 @@
 <img class="rounded w-100 h-100"
      alt="avatar"
      {% if user and user.is_authenticated %}
-     src="{% url 'djforum:get-avatar' user.pk %}"
+     src="{% url 'djforum:avatar' user.pk %}"
      {% else %}
      src="{% static 'djforum/images/default_avatar.png' %}"
      {% endif %}

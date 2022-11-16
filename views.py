@@ -2,8 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.templatetags.static import static
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import RedirectView, TemplateView, DetailView, ListView, FormView
-from django.views.generic.edit import UpdateView
+from django.views.generic import RedirectView, TemplateView, DetailView, ListView, FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import logout
@@ -99,7 +98,7 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @require_GET
-def get_avatar(request, pk):
+def avatar(request, pk):
     user = get_object_or_404(User, pk=pk)
     if hasattr(user, 'avatar'):
         return HttpResponse(user.avatar.data,

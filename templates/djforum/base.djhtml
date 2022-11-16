@@ -43,34 +43,22 @@
           <div id="header-collapse" class="navbar-collapse collapse">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'djforum:topic-list' %}">
-                  Topics
-                </a>
+                <a class="nav-link" href="{% url 'djforum:topic-list' %}">Topics</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'djforum:section-list' %}">
-                  Sections
-                </a>
+                <a class="nav-link" href="{% url 'djforum:section-list' %}">Sections</a>
               </li>
               {% block navbar %}
               {% endblock %}
               {% if request.user.is_authenticated %}
                 {% if request.user.is_superuser %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="/admin/">
-                      Admin
-                    </a>
-                  </li>
+                  <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
                 {% endif %}
                 <li class="nav-item">
                   {% include "djforum/components/user_span.djhtml" with user=request.user css_class="nav-link" %}
                 </li>
               {% else %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'djforum:login' %}">
-                    Login
-                  </a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'djforum:login' %}">Login</a></li>
               {% endif %}
             </ul>
           </div>

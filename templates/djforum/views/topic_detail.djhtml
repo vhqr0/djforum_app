@@ -1,4 +1,4 @@
-{% extends "djforum/components/base.djhtml" %}
+{% extends "djforum/base.djhtml" %}
 
 {% load static %}
 

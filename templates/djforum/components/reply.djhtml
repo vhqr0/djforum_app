@@ -7,61 +7,27 @@
   <div class="col-9 col-md-10 shadow-sm">
     <div class="p-3">
       <div class="bg-light text-secondary text-decoration-underline mb-3">
-        {% if is_top %}
-#0
-        {% else %}
-#{{ reply.count_replies }}
-        {% endif %}
+        {% reply_floor reply is_top %}
         {{ reply.date_created }}
 
         {% if reply.user %}
           <a class="badge bg-secondary text-decoration-none" href="{{ self.path }}?user={{ reply.user }}">See Him/Her</a>
         {% endif %}
 
-        {% if is_top %}
-          <a class="badge bg-secondary text-decoration-none"
-             href="{% url 'djforum:reply-create' topic.pk %}?reference_topic={{ topic.pk }}"
-          >
-            @
-          </a>
-        {% else %}
-          <a class="badge bg-secondary text-decoration-none"
-             href="{% url 'djforum:reply-create' topic.pk %}?reference_topic={{ topic.pk }}&reference_floor={{ reply.count_replies }}"
-          >
-            @
-          </a>
-        {% endif %}
+        <a class="badge bg-secondary text-decoration-none" href="{% reply_ref topic reply is_top %}">@</a>
 
-        {% if is_top %}
-          <a class="badge bg-secondary text-decoration-none"
-             href="{% url 'djforum:topic-create' %}?reference_topic={{ topic.pk }}&section={{ topic.section | default_if_none:'' | iriencode }}"
-          >
-            @@
-          </a>
-        {% else %}
-          <a class="badge bg-secondary text-decoration-none"
-             href="{% url 'djforum:topic-create' %}?reference_topic={{ topic.pk }}&reference_floor={{ reply.count_replies }}&section={{ topic.section | default_if_none:'' | iriencode }}"
-          >
-            @@
-          </a>
-        {% endif %}
+        <a class="badge bg-secondary text-decoration-none" href="{% reply_cross_ref topic reply is_top %}">@@</a>
 
         <button class="btn"
                 id="djf-reply-heart-{{ reply.pk }}"
                 djf-reply-heart-count="{{ reply.count_likes }}"
-
-                {% if is_top %}
-                djf-reply-heart-action="{% url 'djforum:topic-like' reply.pk %}"
-                {% else %}
-                djf-reply-heart-action="{% url 'djforum:reply-like' reply.pk %}"
-                {% endif %}
-
+                djf-reply-heart-action="{% reply_like_url reply is_top %}"
                 onclick="heart_do_like('djf-reply-heart-{{ reply.pk }}');"
         >
           &#x2661; {{ reply.count_likes }}
         </button>
       </div>
-      {% reply_reference reply %}
+      {% reply_reference reply topic %}
       <pre>{{ reply.content }}</pre>
     </div>
   </div>
