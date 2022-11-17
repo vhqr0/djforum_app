@@ -1,8 +1,8 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.templatetags.static import static
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import RedirectView, TemplateView, DetailView, ListView, FormView, UpdateView
+from django.views.generic import TemplateView, DetailView, ListView, FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import logout
@@ -12,8 +12,6 @@ from django.contrib.auth.models import User
 
 from .models import UserProfile, Section, Topic, TopTopic, Reply, LikeTopic, LikeReply
 from .forms import LoginForm, VerifyForm, AvatarUploadForm, TopicCreateForm, ReplyCreateForm
-
-from urllib.parse import urlencode
 
 
 class IndexView(TemplateView):
@@ -64,12 +62,11 @@ class VerifyView(FormView):
             '?' + self.request.GET.urlencode()
 
 
-class LogoutView(RedirectView):
-    url = reverse_lazy('djforum:login')
-
-    def get(self, request, *args, **kwargs):
-        logout(request)
-        return super().get(request, *args, **kwargs)
+@require_POST
+@login_required(login_url=reverse_lazy('djforum:login'))
+def logout_view(request):
+    logout(request)
+    return redirect(reverse('djforum:login'))
 
 
 class UserDetailView(DetailView):
@@ -192,12 +189,11 @@ class TopicCreateView(LoginRequiredMixin, FormView):
         return initial
 
     def form_valid(self, form):
-        self.section = form.save(self.request)
+        self.topic_pk = form.save(self.request)
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('djforum:topic-list') + \
-            '?' + urlencode({'section': self.section or ''})
+        return reverse('djforum:topic-detail', args=(self.topic_pk, ))
 
 
 class ReplyCreateView(LoginRequiredMixin, FormView):

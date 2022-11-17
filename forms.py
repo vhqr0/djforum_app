@@ -144,7 +144,7 @@ class TopicCreateForm(forms.Form):
             section.save()
             topic.section = section
         topic.save()
-        return section_name
+        return topic.pk
 
 
 class ReplyCreateForm(forms.Form):
