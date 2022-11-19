@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.templatetags.static import static
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import TemplateView, DetailView, ListView, FormView, UpdateView
+from django.views.generic import TemplateView, DetailView, ListView, \
+    FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth import logout
@@ -10,8 +11,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
-from .models import UserProfile, Section, Topic, TopTopic, Reply, LikeTopic, LikeReply
-from .forms import LoginForm, VerifyForm, AvatarUploadForm, TopicCreateForm, ReplyCreateForm
+from .models import UserProfile, Section, Topic, TopTopic, Reply, \
+    LikeTopic, LikeReply
+from .forms import LoginForm, VerifyForm, AvatarUploadForm, \
+    TopicCreateForm, ReplyCreateForm
 
 
 class IndexView(TemplateView):

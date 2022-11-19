@@ -1,7 +1,7 @@
 from django import template
 from django.urls import reverse
 
-from ..models import Topic, Reply
+from ..models import Topic
 
 from urllib.parse import urlencode
 

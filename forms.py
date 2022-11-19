@@ -21,8 +21,8 @@ class LoginForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(
         required=False,
-        help_text=
-        'Please enter email if you want to register or change password.',
+        help_text=('Please enter email '
+                   'if you want to register or change password.'),
         widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
         max_length=128,

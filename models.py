@@ -61,11 +61,10 @@ class VerifyRecord(models.Model):
 
     def do_register(self):
         query = Q(username=self.username) | Q(email=self.email)
-        assert User.objects.filter(query).count() == 0
-        user = User.objects.create_user(self.username, \
-                                        self.email, \
-                                        self.password)
-        user.save()
+        if User.objects.filter(query).count() == 0:
+            user = User.objects.create_user(self.username, self.email,
+                                            self.password)
+            user.save()
 
     def do_change_password(self):
         user = User.objects.get(email=self.email)
@@ -160,6 +159,14 @@ class Topic(models.Model):
         else:
             qs = qs.order_by('-date_updated')
         return qs
+
+    @classmethod
+    def filter_by_username(cls, username):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            pass
+        return cls.objects.filter(user=user)
 
     def reply_filter(self, GET):
         qs = self.reply_set

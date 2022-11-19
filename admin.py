@@ -54,22 +54,19 @@ class ReplyInline(admin.StackedInline):
                 'fields': (('user', 'date_created'), )
             },
         ),
-        ('Detail', {
-            'classes': ('collapse', ),
-            'fields': (('reference_topic', 'reference_floor'), 'content'),
-        }),
+        (
+            'Detail',
+            {
+                'classes': ('collapse', ),
+                'fields': (('reference_topic', 'reference_floor'), 'content'),
+            },
+        ),
     )
-
-
-@admin.action(description='Set Top')
-def set_top(modeladmin, request, queryset):
-    for topic in queryset:
-        TopTopic.set_top(topic)
 
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    inlines = [ReplyInline]
+    inlines = (ReplyInline, )
     date_hierarchy = 'date_created'
     readonly_fields = ('user', 'section')
     fieldsets = (
@@ -90,4 +87,32 @@ class TopicAdmin(admin.ModelAdmin):
     list_display = ('title', 'section', 'user', 'date_updated', 'date_created')
     list_filter = ('section', 'user', 'date_updated', 'date_created')
     search_fields = ('title', 'keywords')
-    actions = [set_top]
+    search_help_text = ('Magic search, # for user, @ for topic id, '
+                        'or else for title and keyword.')
+    actions = ('set_top', )
+
+    def get_search_results(self, result, queryset, search_term):
+        """
+        Magic search with magic prefix.
+        # for search specific user.
+        @ for search specific topic.
+        Or else use default search results.
+        """
+        if len(search_term) == 0:
+            return super().get_search_results(result, queryset, search_term)
+        magic = search_term[0]
+        if magic == '#':  # for user
+            qs = Topic.filter_by_username(search_term[1:])
+            if qs is None:
+                return super().get_search_results(result, queryset, '')
+            else:
+                return qs, False
+        elif magic == '@':  # for topic
+            return Topic.objects.filter(pk=search_term[1:]), False
+        else:
+            return super().get_search_results(result, queryset, search_term)
+
+    @admin.action(description='Set selected topics as toptopics')
+    def set_top(self, request, queryset):
+        for topic in queryset:
+            TopTopic.set_top(topic)
