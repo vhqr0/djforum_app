@@ -35,30 +35,35 @@ class LoginForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}))
 
     def clean(self):
-        username = self.cleaned_data['username']
-        email = self.cleaned_data['email']
-        password = self.cleaned_data['password']
-        login_type = self.cleaned_data['login_type']
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+        login_type = cleaned_data.get('login_type')
         if login_type == 'login':
-            if not username:
-                raise forms.ValidationError('Username cannot leave blank!')
+            if not username or not password:
+                raise forms.ValidationError(
+                    'Username or Password cannot leave blank!')
             self.user = authenticate(username=username, password=password)
             if self.user is None or not self.user.is_active:
                 raise forms.ValidationError('Invalid Username or Password!')
         elif login_type == 'register':
-            if not username or not email:
+            if not username or not email or not password:
                 raise forms.ValidationError(
-                    'Username or Email cannot leave blank!')
+                    'Username, Email or Password cannot leave blank!')
             query = Q(username=username) | Q(email=email)
             if User.objects.filter(query).count() != 0:
                 raise forms.ValidationError(
                     'Username or Email is already exists!')
-        else:
-            if not email:
-                raise forms.ValidationError('Email cannot leave blank!')
+        elif login_type == 'password':
+            if not email or not password:
+                raise forms.ValidationError(
+                    'Email or Password cannot leave blank!')
             if User.objects.filter(email=email).count() == 0:
                 raise forms.ValidationError('Email is not exists!')
-        return super().clean()
+        else:
+            raise forms.ValidationError('Invalid Login Type!')
+        return cleaned_data
 
     def login(self, request):
         login(request, self.user)
@@ -78,10 +83,17 @@ class VerifyForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def clean(self):
-        self.verify_record = VerifyRecord.objects.get(pk=self.verify_pk)
+        cleaned_data = super().clean()
+        verify_code = cleaned_data.get('verify_code')
+        if not verify_code:
+            raise forms.ValidationError('Verify Code cannot leave blank!')
+        try:
+            self.verify_record = VerifyRecord.objects.get(pk=self.verify_pk)
+        except VerifyRecord.DoesNotExist:
+            raise forms.ValidationError('Invalid Verify Record!')
         if not self.verify_record.is_valid(self.cleaned_data['verify_code']):
             raise forms.ValidationError('Invalid Verify Code!')
-        return super().clean()
+        return cleaned_data
 
     def do_action(self):
         return self.verify_record.do_action()
@@ -93,9 +105,11 @@ class AvatarUploadForm(forms.Form):
         widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
     def clean(self):
-        if self.cleaned_data['avatar'].size > 4096:
+        cleaned_data = super().clean()
+        avatar = cleaned_data.get('avatar')
+        if avatar and avatar.size > 4096:
             raise forms.ValidationError('Image too big!')
-        return super().clean()
+        return cleaned_data
 
     def save(self, request):
         Avatar.set(request.user, self.cleaned_data['avatar'])

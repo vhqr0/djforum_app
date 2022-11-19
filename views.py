@@ -66,7 +66,7 @@ class VerifyView(FormView):
 @login_required(login_url=reverse_lazy('djforum:login'))
 def logout_view(request):
     logout(request)
-    return redirect(reverse('djforum:login'))
+    return redirect('djforum:login')
 
 
 class UserDetailView(DetailView):
