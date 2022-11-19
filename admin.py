@@ -115,4 +115,4 @@ class TopicAdmin(admin.ModelAdmin):
     @admin.action(description='Set selected topics as toptopics')
     def set_top(self, request, queryset):
         for topic in queryset:
-            TopTopic.set_top(topic)
+            TopTopic.set(topic)

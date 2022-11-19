@@ -197,7 +197,7 @@ class TopTopic(models.Model):
         return str(self.topic)
 
     @classmethod
-    def set_top(cls, topic):
+    def set(cls, topic):
         qs = cls.objects.filter(topic=topic)
         if qs.count() == 0:
             cls.objects.create(topic=topic)
@@ -223,6 +223,7 @@ class Reply(models.Model):
 class LikeTopic(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user} likes {self.topic}'
@@ -231,6 +232,7 @@ class LikeTopic(models.Model):
 class LikeReply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
+    date_created = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Like Replies'
