@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.db import models
 from django.db.models import Q
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -135,6 +136,9 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('djforum:topic-detail', args=(self.pk, ))
+
     @classmethod
     def filter(cls, GET):
         qs = cls.objects.all()
@@ -180,10 +184,16 @@ class Topic(models.Model):
 
 
 class TopTopic(models.Model):
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    topic = models.OneToOneField(Topic, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.topic)
+
+    @classmethod
+    def set_top(cls, topic):
+        qs = cls.objects.filter(topic=topic)
+        if qs.count() == 0:
+            cls.objects.create(topic=topic)
 
 
 class Reply(models.Model):
@@ -200,7 +210,7 @@ class Reply(models.Model):
         verbose_name_plural = 'Replies'
 
     def __str__(self):
-        return f'{self.user}: {self.topic}'
+        return str(self.count_replies)
 
 
 class LikeTopic(models.Model):
