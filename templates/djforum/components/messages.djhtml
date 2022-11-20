@@ -1,0 +1,12 @@
+{% if messages %}
+  <div class="container-md">
+    {% for message in messages %}
+      <div class="row">
+        <div class="alert alert-{{message.tags}} col my-1 shadow">
+          {{ message }}
+          <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

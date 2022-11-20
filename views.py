@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, DetailView, ListView, \
     FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -34,8 +35,14 @@ class LoginView(FormView):
         self.login_type = self.request.POST['login_type']
         if self.login_type == 'login':
             form.login(self.request)
+            messages.add_message(
+                self.request, messages.SUCCESS,
+                f'Login as user({self.request.user}) success')
         else:
             self.verify_pk = form.verify()
+            messages.add_message(self.request, messages.INFO,
+                                 ('An email shoud send to you'
+                                  f'({form.cleaned_data["email"]})'))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -58,6 +65,10 @@ class VerifyView(FormView):
 
     def form_valid(self, form):
         form.do_action()
+        messages.add_message(
+            self.request, messages.SUCCESS,
+            ('Verify success, '
+             'the user has registered or the password has changed'))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -68,6 +79,8 @@ class VerifyView(FormView):
 @require_POST
 @login_required(login_url=reverse_lazy('djforum:login'))
 def logout_view(request):
+    messages.add_message(request, messages.WARNING,
+                         f'Logout from user({request.user})')
     logout(request)
     return redirect('djforum:login')
 
@@ -115,6 +128,8 @@ class AvatarUploadView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         form.save(self.request)
+        messages.add_message(self.request, messages.SUCCESS,
+                             'Upload avatar success')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -193,6 +208,8 @@ class TopicCreateView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.topic_pk = form.save(self.request)
+        messages.add_message(self.request, messages.SUCCESS,
+                             'Create topic success')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -217,6 +234,8 @@ class ReplyCreateView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         topic = get_object_or_404(Topic, pk=self.kwargs['pk'])
         form.save(self.request, topic)
+        messages.add_message(self.request, messages.SUCCESS,
+                             'Create reply success')
         return super().form_valid(form)
 
     def get_success_url(self):

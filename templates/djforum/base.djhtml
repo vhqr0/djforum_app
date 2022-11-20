@@ -56,6 +56,8 @@
 
     <hr class="invisible" />
 
+    {% include "djforum/components/messages.djhtml" %}
+
     {% block body %}
     {% endblock %}
   </body>

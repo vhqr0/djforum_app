@@ -1,4 +1,4 @@
-<div class="container border">
+<div class="container-md border">
   <form class="django-form"
         method="POST"
 
