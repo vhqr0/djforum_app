@@ -7,7 +7,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-      DJForum {% block title %}{% endblock %}
+      DJForum
+      {% block title %}
+      {% endblock %}
     </title>
     {% include "djforum/configs/bootstrap.djhtml" %}
     <link href="{% static 'djforum/css/bootstrap-django-form.css' %}" rel="stylesheet" />

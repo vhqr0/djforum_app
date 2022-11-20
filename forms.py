@@ -6,6 +6,18 @@ from django.contrib.auth.models import User
 
 from .models import VerifyRecord, Avatar, Section, Topic, Reply
 
+
+class FormControlMixin:
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for _, field in self.fields.items():
+            if field.widget.attrs.get('class'):
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+
+
 LOGIN_TYPE_CHOICES = (
     ('login', 'User Login'),
     ('register', 'User Register'),
@@ -13,26 +25,21 @@ LOGIN_TYPE_CHOICES = (
 )
 
 
-class LoginForm(forms.Form):
+class LoginForm(FormControlMixin, forms.Form):
     username = forms.CharField(
         max_length=150,
         required=False,
-        help_text='Please enter username if you want to login or register.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        help_text='Please enter username if you want to login or register.')
     email = forms.EmailField(
         required=False,
         help_text=('Please enter email '
-                   'if you want to register or change password.'),
-        widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(
-        max_length=128,
-        help_text='Please enter password.',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    login_type = forms.ChoiceField(
-        choices=LOGIN_TYPE_CHOICES,
-        initial='login',
-        help_text='Please select an action.',
-        widget=forms.Select(attrs={'class': 'form-control'}))
+                   'if you want to register or change password.'))
+    password = forms.CharField(max_length=128,
+                               help_text='Please enter password.',
+                               widget=forms.PasswordInput)
+    login_type = forms.ChoiceField(choices=LOGIN_TYPE_CHOICES,
+                                   initial='login',
+                                   help_text='Please select an action.')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -77,10 +84,9 @@ class LoginForm(forms.Form):
         return record.pk
 
 
-class VerifyForm(forms.Form):
+class VerifyForm(FormControlMixin, forms.Form):
     verify_code = forms.UUIDField(
-        help_text='Please enter the verify code sent to your email.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        help_text='Please enter the verify code sent to your email.')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -99,10 +105,8 @@ class VerifyForm(forms.Form):
         return self.verify_record.do_action()
 
 
-class AvatarUploadForm(forms.Form):
-    avatar = forms.ImageField(
-        help_text='Please upload an image < 4KB.',
-        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+class AvatarUploadForm(FormControlMixin, forms.Form):
+    avatar = forms.ImageField(help_text='Please upload an image < 4KB.')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -115,34 +119,23 @@ class AvatarUploadForm(forms.Form):
         Avatar.set(request.user, self.cleaned_data['avatar'])
 
 
-class TopicCreateForm(forms.Form):
-    section = forms.CharField(
-        max_length=16,
-        required=False,
-        help_text='Please enter a section if you want.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    title = forms.CharField(
-        max_length=64,
-        help_text='Please enter the title.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    keywords = forms.CharField(
-        max_length=64,
-        required=False,
-        help_text='Please enter keywords if you want.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    reference_topic = forms.IntegerField(
-        required=False,
-        help_text='Refer to a topic.',
-        widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    reference_floor = forms.IntegerField(
-        required=False,
-        help_text='Refer to a reply.',
-        widget=forms.NumberInput(attrs={'class': 'form-control'}))
+class TopicCreateForm(FormControlMixin, forms.Form):
+    section = forms.CharField(max_length=16,
+                              required=False,
+                              help_text='Please enter a section if you want.')
+    title = forms.CharField(max_length=64, help_text='Please enter the title.')
+    keywords = forms.CharField(max_length=64,
+                               required=False,
+                               help_text='Please enter keywords if you want.')
+    reference_topic = forms.IntegerField(required=False,
+                                         help_text='Refer to a topic.')
+    reference_floor = forms.IntegerField(required=False,
+                                         help_text='Refer to a reply.')
     content = forms.CharField(
         max_length=2048,
         required=False,
         help_text='Please enter a description < 2048 chars if you want.',
-        widget=forms.Textarea(attrs={'class': 'form-control'}))
+        widget=forms.Textarea)
 
     def save(self, request):
         topic = Topic(user=request.user,
@@ -161,19 +154,14 @@ class TopicCreateForm(forms.Form):
         return topic.pk
 
 
-class ReplyCreateForm(forms.Form):
-    reference_topic = forms.IntegerField(
-        required=False,
-        help_text='Refer to a topic.',
-        widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    reference_floor = forms.IntegerField(
-        required=False,
-        help_text='Refer to a reply.',
-        widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    reply = forms.CharField(
-        max_length=2048,
-        help_text='Please input text < 2048 chars.',
-        widget=forms.Textarea(attrs={'class': 'form-control'}))
+class ReplyCreateForm(FormControlMixin, forms.Form):
+    reference_topic = forms.IntegerField(required=False,
+                                         help_text='Refer to a topic.')
+    reference_floor = forms.IntegerField(required=False,
+                                         help_text='Refer to a reply.')
+    reply = forms.CharField(max_length=2048,
+                            help_text='Please input text < 2048 chars.',
+                            widget=forms.Textarea)
 
     def save(self, request, topic):
         topic.count_replies += 1
