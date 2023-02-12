@@ -3,5 +3,5 @@
 {% block title %} Create Reply {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/forms/django_form.djhtml" with form=form legend="Create Reply" %}
+  {% include "djforum/components/django_form.djhtml" with form=form legend="Create Reply" %}
 {% endblock %}

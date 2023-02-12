@@ -4,7 +4,7 @@
 
 {% block body %}
   <div class="container-md text-dark">
-    {% include "djforum/components/forms/section_filter_form.djhtml" with search=search %}
+    {% include "djforum/components/section_filter_form.djhtml" with search=search %}
     <hr class="invisible" />
 
     {% for section in page_obj %}

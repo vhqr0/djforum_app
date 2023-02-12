@@ -1,4 +1,4 @@
-{% extends "djforum/components/forms/filter_form.djhtml" %}
+{% extends "djforum/components/filter_form.djhtml" %}
 
 {% block filter_form %}
   <div class="col">

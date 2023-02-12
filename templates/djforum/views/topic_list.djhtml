@@ -12,7 +12,7 @@
 
 {% block body %}
   <div class="container-md text-dark">
-    {% include "djforum/components/forms/topic_filter_form.djhtml" with section=section %}
+    {% include "djforum/components/topic_filter_form.djhtml" with section=section %}
     <hr class="invisible" />
 
     {% for topic in page_obj %}

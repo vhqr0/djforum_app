@@ -3,5 +3,5 @@
 {% block title %} User - {{ request.user }} {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/forms/django_form.djhtml" with form=form %}
+  {%include "djforum/components/django_form.djhtml" with form=form legend="Avatar Upload" enctype="multipart/form-data" %}
 {% endblock %}

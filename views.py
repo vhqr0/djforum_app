@@ -40,7 +40,7 @@ class UserDetailView(DetailView):
 class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = UserProfile
     fields = ['website', 'introduction']
-    template_name = 'djforum/views/forms/userprofile_update.djhtml'
+    template_name = 'djforum/views/userprofile_update.djhtml'
 
     def get_object(self, queryset=None):
         return UserProfile.get_profile(self.request.user)
@@ -62,7 +62,7 @@ def avatar(request, pk):
 
 class AvatarUploadView(LoginRequiredMixin, FormView):
     form_class = AvatarUploadForm
-    template_name = 'djforum/views/forms/avatar_upload.djhtml'
+    template_name = 'djforum/views/avatar_upload.djhtml'
 
     def form_valid(self, form):
         form.save(self.request)
@@ -128,7 +128,7 @@ class TopicDetailView(SingleObjectMixin, ListView):
 
 class TopicCreateView(LoginRequiredMixin, FormView):
     form_class = TopicCreateForm
-    template_name = 'djforum/views/forms/topic_create.djhtml'
+    template_name = 'djforum/views/topic_create.djhtml'
 
     def get_initial(self):
         initial = super().get_initial()
@@ -155,7 +155,7 @@ class TopicCreateView(LoginRequiredMixin, FormView):
 
 class ReplyCreateView(LoginRequiredMixin, FormView):
     form_class = ReplyCreateForm
-    template_name = 'djforum/views/forms/reply_create.djhtml'
+    template_name = 'djforum/views/reply_create.djhtml'
 
     def get_initial(self):
         initial = super().get_initial()

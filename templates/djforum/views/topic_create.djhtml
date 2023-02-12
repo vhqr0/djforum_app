@@ -3,5 +3,5 @@
 {% block title %} Create Topic {% endblock %}
 
 {% block body %}
-  {% include "djforum/components/forms/django_form.djhtml" with form=form legend="Create Topic" %}
+  {% include "djforum/components/django_form.djhtml" with form=form legend="Create Topic" %}
 {% endblock %}

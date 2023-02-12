@@ -23,7 +23,7 @@
       {% include "djforum/components/topic_hints.djhtml" with topic=topic %}
     </div>
 
-    {% include "djforum/components/forms/reply_filter_form.djhtml" %}
+    {% include "djforum/components/reply_filter_form.djhtml" %}
     <hr class="invisible" />
 
     {% include "djforum/components/reply.djhtml" with reply=topic topic=topic is_top=True %}
