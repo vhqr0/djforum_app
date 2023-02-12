@@ -1,36 +1,6 @@
 from django.contrib import admin
 
-from .models import VerifyRecord, Topic, TopTopic, Reply
-
-
-@admin.register(VerifyRecord)
-class VerifyRecordAdmin(admin.ModelAdmin):
-    date_hierarchy = 'time_sent'
-    readonly_fields = (
-        'email',
-        'time_sent',
-        'verify_type',
-        'verify_code',
-        'username',
-        'password',
-    )
-    fieldsets = (
-        (
-            None,
-            {
-                'fields': ('email', 'verify_type', 'time_sent'),
-            },
-        ),
-        (
-            'Detail',
-            {
-                'classes': ('collapse', ),
-                'fields': ('verify_code', 'username', 'password'),
-            },
-        ),
-    )
-    list_display = ('email', 'verify_type', 'time_sent')
-    list_filter = ('verify_type', 'time_sent')
+from .models import Topic, TopTopic, Reply
 
 
 @admin.register(TopTopic)

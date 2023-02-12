@@ -1,0 +1,7 @@
+{% extends "djforum/base.djhtml" %}
+
+{% block title %}Activation email sent{% endblock %}
+
+{% block body %}
+  <p>Please check your email to complete the registration process.</p>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "djforum/base.djhtml" %}
+
+{% block title %}Account Activation Resent{% endblock %}
+
+{% block body %}
+  <p>
+    We have sent an email to {{ email }} with further instructions.
+  </p>
+{% endblock %}

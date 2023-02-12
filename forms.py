@@ -1,10 +1,7 @@
 from django import forms
-from django.db.models import Q
 from django.utils import timezone
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 
-from .models import VerifyRecord, Avatar, Section, Topic, Reply
+from .models import Avatar, Section, Topic, Reply
 
 
 class FormControlMixin:
@@ -23,86 +20,6 @@ LOGIN_TYPE_CHOICES = (
     ('register', 'User Register'),
     ('password', 'Change Password'),
 )
-
-
-class LoginForm(FormControlMixin, forms.Form):
-    username = forms.CharField(
-        max_length=150,
-        required=False,
-        help_text='Please enter username if you want to login or register.')
-    email = forms.EmailField(
-        required=False,
-        help_text=('Please enter email '
-                   'if you want to register or change password.'))
-    password = forms.CharField(max_length=128,
-                               help_text='Please enter password.',
-                               widget=forms.PasswordInput)
-    login_type = forms.ChoiceField(choices=LOGIN_TYPE_CHOICES,
-                                   initial='login',
-                                   help_text='Please select an action.')
-
-    def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        email = cleaned_data.get('email')
-        password = cleaned_data.get('password')
-        login_type = cleaned_data.get('login_type')
-        if login_type == 'login':
-            if not username or not password:
-                raise forms.ValidationError(
-                    'Username or Password cannot leave blank!')
-            self.user = authenticate(username=username, password=password)
-            if self.user is None or not self.user.is_active:
-                raise forms.ValidationError('Invalid Username or Password!')
-        elif login_type == 'register':
-            if not username or not email or not password:
-                raise forms.ValidationError(
-                    'Username, Email or Password cannot leave blank!')
-            query = Q(username=username) | Q(email=email)
-            if User.objects.filter(query).count() != 0:
-                raise forms.ValidationError(
-                    'Username or Email is already exists!')
-        elif login_type == 'password':
-            if not email or not password:
-                raise forms.ValidationError(
-                    'Email or Password cannot leave blank!')
-            if User.objects.filter(email=email).count() == 0:
-                raise forms.ValidationError('Email is not exists!')
-        else:
-            raise forms.ValidationError('Invalid Login Type!')
-        return cleaned_data
-
-    def login(self, request):
-        login(request, self.user)
-
-    def verify(self):
-        record = VerifyRecord(username=self.cleaned_data['username'],
-                              email=self.cleaned_data['email'],
-                              password=self.cleaned_data['password'],
-                              verify_type=self.cleaned_data['login_type'])
-        record.save()
-        return record.pk
-
-
-class VerifyForm(FormControlMixin, forms.Form):
-    verify_code = forms.UUIDField(
-        help_text='Please enter the verify code sent to your email.')
-
-    def clean(self):
-        cleaned_data = super().clean()
-        verify_code = cleaned_data.get('verify_code')
-        if not verify_code:
-            raise forms.ValidationError('Verify Code cannot leave blank!')
-        try:
-            self.verify_record = VerifyRecord.objects.get(pk=self.verify_pk)
-        except VerifyRecord.DoesNotExist:
-            raise forms.ValidationError('Invalid Verify Record!')
-        if not self.verify_record.is_valid(self.cleaned_data['verify_code']):
-            raise forms.ValidationError('Invalid Verify Code!')
-        return cleaned_data
-
-    def do_action(self):
-        return self.verify_record.do_action()
 
 
 class AvatarUploadForm(FormControlMixin, forms.Form):

@@ -1,0 +1,7 @@
+{% extends "djforum/base.djhtml" %}
+
+{% block title %}Registration is closed{% endblock %}
+
+{% block body %}
+  <p>Sorry, but registration is closed at this moment. Come back later.</p>
+{% endblock %}

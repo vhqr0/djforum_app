@@ -1,7 +1,0 @@
-{% extends "djforum/base.djhtml" %}
-
-{% block title %} Login {% endblock %}
-
-{% block body %}
-  {% include "djforum/components/forms/django_form.djhtml" with form=form legend="Login" %}
-{% endblock %}

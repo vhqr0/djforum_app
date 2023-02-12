@@ -6,6 +6,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {% block meta %}
+    {% endblock %}
     <title>
       DJForum
       {% block title %}
@@ -48,7 +50,7 @@
                   {% include "djforum/components/user_span.djhtml" with user=request.user css_class="nav-link" %}
                 </li>
               {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'djforum:login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
               {% endif %}
             </ul>
           </div>

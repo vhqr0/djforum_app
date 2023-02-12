@@ -1,0 +1,12 @@
+{% extends "djforum/base.djhtml" %}
+
+{% block title %} Account Activated {% endblock %}
+
+{% block body %}
+  <p>
+    Your account is now activated.
+    {% if not user.is_authenticated %}
+      Once a site administrator activates your account you can login.
+    {% endif %}
+  </p>
+{% endblock %}

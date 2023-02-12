@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import IndexView, LoginView, VerifyView, logout_view, \
+from .views import IndexView, \
     UserDetailView, UserProfileUpdateView, avatar, AvatarUploadView, \
     SectionListView, TopicListView, TopicDetailView, \
     TopicCreateView, ReplyCreateView, topic_like, reply_like
@@ -8,9 +8,6 @@ from .views import IndexView, LoginView, VerifyView, logout_view, \
 app_name = 'djforum'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('verify/<int:pk>/', VerifyView.as_view(), name='verify'),
-    path('logout/', logout_view, name='logout'),
     path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('userprofile-update/',
          UserProfileUpdateView.as_view(),

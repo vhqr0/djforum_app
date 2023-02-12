@@ -21,7 +21,7 @@
       {% if user == request.user %}
         <div class="text-end">
           <a class="link-primary" href="{% url 'djforum:userprofile-update' %}">EDIT</a>
-          <form class="d-inline" action="{% url 'djforum:logout' %}" method="POST">
+          <form class="d-inline" action="{% url 'auth_logout' %}" method="POST">
             {% csrf_token %}
             <button class="link-danger" type="submit">LOGOUT</button>
           </form>

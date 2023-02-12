@@ -1,0 +1,7 @@
+{% extends "djforum/base.djhtml" %}
+
+{% block title %} Activation Failure {% endblock %}
+
+{% block body %}
+<p>Account activation failed.</p>
+{% endblock %}

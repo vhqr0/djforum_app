@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.templatetags.static import static
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,15 +7,13 @@ from django.views.generic import TemplateView, DetailView, ListView, \
 from django.views.generic.detail import SingleObjectMixin
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib import messages
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 from .models import UserProfile, Section, Topic, TopTopic, Reply, \
     LikeTopic, LikeReply
-from .forms import LoginForm, VerifyForm, AvatarUploadForm, \
-    TopicCreateForm, ReplyCreateForm
+from .forms import AvatarUploadForm, TopicCreateForm, ReplyCreateForm
 
 
 class IndexView(TemplateView):
@@ -25,64 +23,6 @@ class IndexView(TemplateView):
         toptopics = TopTopic.objects.all()
         topics = Topic.objects.order_by('-date_updated')[:20]
         return {'toptopics': toptopics, 'topics': topics}
-
-
-class LoginView(FormView):
-    form_class = LoginForm
-    template_name = 'djforum/views/forms/login.djhtml'
-
-    def form_valid(self, form):
-        self.login_type = self.request.POST['login_type']
-        if self.login_type == 'login':
-            form.login(self.request)
-            messages.add_message(
-                self.request, messages.SUCCESS,
-                f'Login as user({self.request.user}) success')
-        else:
-            self.verify_pk = form.verify()
-            messages.add_message(self.request, messages.INFO,
-                                 ('An email shoud send to you'
-                                  f'({form.cleaned_data["email"]})'))
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        if self.login_type == 'login':
-            next = self.request.GET.get('next')
-            return next if next else reverse('djforum:index')
-        else:
-            return reverse('djforum:verify', args=(self.verify_pk, )) + \
-                '?' + self.request.GET.urlencode()
-
-
-class VerifyView(FormView):
-    form_class = VerifyForm
-    template_name = 'djforum/views/forms/verify.djhtml'
-
-    def get_form(self, *args, **kwargs):
-        form = super().get_form(*args, **kwargs)
-        form.verify_pk = self.kwargs['pk']
-        return form
-
-    def form_valid(self, form):
-        form.do_action()
-        messages.add_message(
-            self.request, messages.SUCCESS,
-            ('Verify success, '
-             'the user has registered or the password has changed'))
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('djforum:login') + \
-            '?' + self.request.GET.urlencode()
-
-
-@require_POST
-@login_required(login_url=reverse_lazy('djforum:login'))
-def logout_view(request):
-    messages.add_message(request, messages.WARNING,
-                         f'Logout from user({request.user})')
-    logout(request)
-    return redirect('djforum:login')
 
 
 class UserDetailView(DetailView):
@@ -101,7 +41,6 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = UserProfile
     fields = ['website', 'introduction']
     template_name = 'djforum/views/forms/userprofile_update.djhtml'
-    login_url = reverse_lazy('djforum:login')
 
     def get_object(self, queryset=None):
         return UserProfile.get_profile(self.request.user)
@@ -124,7 +63,6 @@ def avatar(request, pk):
 class AvatarUploadView(LoginRequiredMixin, FormView):
     form_class = AvatarUploadForm
     template_name = 'djforum/views/forms/avatar_upload.djhtml'
-    login_url = reverse_lazy('djforum:login')
 
     def form_valid(self, form):
         form.save(self.request)
@@ -191,7 +129,6 @@ class TopicDetailView(SingleObjectMixin, ListView):
 class TopicCreateView(LoginRequiredMixin, FormView):
     form_class = TopicCreateForm
     template_name = 'djforum/views/forms/topic_create.djhtml'
-    login_url = reverse_lazy('djforum:login')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -219,7 +156,6 @@ class TopicCreateView(LoginRequiredMixin, FormView):
 class ReplyCreateView(LoginRequiredMixin, FormView):
     form_class = ReplyCreateForm
     template_name = 'djforum/views/forms/reply_create.djhtml'
-    login_url = reverse_lazy('djforum:login')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -243,7 +179,7 @@ class ReplyCreateView(LoginRequiredMixin, FormView):
 
 
 @require_POST
-@login_required(login_url=reverse_lazy('djforum:login'))
+@login_required()
 def topic_like(request, pk):
     user = request.user
     topic = get_object_or_404(Topic, pk=pk)
@@ -256,7 +192,7 @@ def topic_like(request, pk):
 
 
 @require_POST
-@login_required(login_url=reverse_lazy('djforum:login'))
+@login_required()
 def reply_like(request, pk):
     user = request.user
     reply = get_object_or_404(Reply, pk=pk)
